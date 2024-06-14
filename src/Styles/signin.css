@@ -1,0 +1,9 @@
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: url("https://images.pexels.com/photos/1571463/pexels-photo-1571463.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")
+    no-repeat;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}

@@ -1,0 +1,18 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.bg-home-back {
+  background-image: url("../../components/assets/homeback.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.no-underline {
+  text-decoration: none;
+}
+
+.no-underline:hover {
+  text-decoration: none;
+}
