@@ -26,6 +26,7 @@ function SignIn() {
   const handleSignInSuccess = (user, token) => {
     localStorage.setItem("usertoken", token);
     localStorage.setItem("currentUser", JSON.stringify(user));
+    localStorage.setItem("_id", JSON.stringify(user._id));
     dispatch(signinSuccess(user));
     navigate("/");
     toast.success("Login successful");
@@ -36,10 +37,7 @@ function SignIn() {
     dispatch(signinStart());
 
     try {
-      const response = await interceptor.post(
-        "/api/user/signin",
-        formData
-      );
+      const response = await interceptor.post("/api/user/signin", formData);
 
       if (response.data.token && response.data.user) {
         handleSignInSuccess(response.data.user, response.data.token);
