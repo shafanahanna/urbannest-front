@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { FaCloudDownloadAlt } from "react-icons/fa";
 import html2canvas from "html2canvas";
+import interceptor from "../../axios/userinterceptor";
 
 function Order() {
   const { id } = useParams();
@@ -13,12 +13,7 @@ function Order() {
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
-        const token = localStorage.getItem("usertoken");
-        const headers = token ? { Authorization: `Bearer ${token}` } : {};
-        const response = await axios.get(
-          `http://localhost:3000/api/user/order/${id}`,
-          { headers }
-        );
+        const response = await interceptor.get(`/api/user/order/${id}`);
         setOrder(response.data.data);
       } catch (err) {
         setError(err.response ? err.response.data.message : err.message);
@@ -116,7 +111,9 @@ function Order() {
       </div>
       <div className="mb-4 text-center">
         <h2 className="text-xl font-bold text-green-700">Order Confirmed...</h2>
-        <p className="text-gray-700 mt-2">Your order is confirmed. Thank you for choosing UrbanNest!</p>
+        <p className="text-gray-700 mt-2">
+          Your order is confirmed. Thank you for choosing UrbanNest!
+        </p>
       </div>
       <div
         className="download-container flex justify-center items-center cursor-pointer p-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-300"

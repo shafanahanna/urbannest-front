@@ -26,10 +26,12 @@ function Payment() {
       return;
     }
     try {
-      const orderResponse = await interceptor.post(
-        "/api/user/order",
-        { userId: userId, PropertyId, amount: price, currency: "INR" },
-      );
+      const orderResponse = await interceptor.post("/api/user/order", {
+        userId: userId,
+        PropertyId,
+        amount: price,
+        currency: "INR",
+      });
 
       const { payment_id, _id: orderId } = orderResponse.data.data;
 
@@ -37,16 +39,12 @@ function Payment() {
       const currency = "INR";
       const receipt = `receipt_${Date.now()}`;
 
-      const response = await interceptor.post(
-        "/api/user/payment",
-        {
-          amount,
-          currency,
-          receipt,
-          payment_id,
-        },
-        
-      );
+      const response = await interceptor.post("/api/user/payment", {
+        amount,
+        currency,
+        receipt,
+        payment_id,
+      });
 
       const {
         data: { data: paymentData },
