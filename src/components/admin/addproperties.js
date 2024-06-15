@@ -37,7 +37,7 @@ const AddProperty = () => {
   }, []);
 
   const handleSubmit = async (formData, { resetForm }) => {
-    console.log("Form submitted:", formData); // Check if handleSubmit is called
+    console.log("Form submitted:", formData); 
     setLoading(true);
     try {
       const formDataToSend = new FormData();
