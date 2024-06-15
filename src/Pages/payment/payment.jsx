@@ -73,8 +73,8 @@ function Payment() {
           });
         },
         prefill: {
-          name: currentUser ? currentUser.name : "Shafana Hanna",
-          email: currentUser ? currentUser.email : "shafanahanna1999@gmail.com",
+          name: currentUser.name,
+          email: currentUser.email,
         },
         theme: {
           color: "#3399cc",
