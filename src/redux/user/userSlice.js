@@ -12,23 +12,19 @@ const userSlice = createSlice({
   reducers: {
     signinStart: (state) => {
       state.loading = true;
-      console.log("Signin start");
     },
     signinSuccess: (state, action) => {
       state.currentUser = action.payload;
       state.loading = false;
       state.error = "";
-      console.log("Signin success", action.payload);
       localStorage.setItem("currentUser", JSON.stringify(action.payload));
     },
     signinFailure: (state, action) => {
       state.loading = false;
       state.error = action.payload;
-      console.log("Signin failure", action.payload);
     },
     signout: (state) => {
       state.currentUser = null;
-      console.log("Signout");
       localStorage.removeItem("currentUser");
     },
     updateUserStart: (state) => {

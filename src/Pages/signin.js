@@ -26,8 +26,8 @@ function SignIn() {
   const handleSignInSuccess = (user, token) => {
     localStorage.setItem("usertoken", token);
     localStorage.setItem("currentUser", JSON.stringify(user));
-    localStorage.setItem("_id", JSON.stringify(user._id));
-    console.log(JSON.stringify(user.id), "this is id");
+    localStorage.setItem("_id", JSON.stringify(user.id));
+    console.log(JSON.stringify(user.id), "this is my user id");
     dispatch(signinSuccess(user));
     navigate("/");
     toast.success("Login successful");

@@ -19,8 +19,7 @@ function Payment() {
     setLoading(true);
     const userToken = localStorage.getItem("usertoken");
     const userId = localStorage.getItem("_id");
-    const headers = userToken ? { Authorization: `Bearer ${userToken}` } : {};
-
+    console.log(userId, "this is id");
     if (!userToken) {
       console.log("token not found..");
       setLoading(false);
@@ -30,7 +29,6 @@ function Payment() {
       const orderResponse = await interceptor.post(
         "/api/user/order",
         { userId: userId, PropertyId, amount: price, currency: "INR" },
-        { headers }
       );
 
       const { payment_id, _id: orderId } = orderResponse.data.data;
@@ -47,7 +45,7 @@ function Payment() {
           receipt,
           payment_id,
         },
-        { headers: headers }
+        
       );
 
       const {
