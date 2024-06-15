@@ -1,4 +1,5 @@
 {
+  "version": 2,
   "builds": [
     {
       "src": "package.json",
@@ -6,5 +7,8 @@
       "config": { "distDir": "build" }
     }
   ],
-  "routes": [{ "src": "/(.*)", "dest": "/" }]
+  "routes": [
+    { "src": "/(.*)", "dest": "/index.html" }
+  ],
+  "buildCommand": "npm run build"
 }
