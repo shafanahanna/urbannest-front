@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import OAuth from "../components/OAuth";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import interceptor from "../axios/userinterceptor";
 
 function SignUp() {
   const [loading, setLoading] = useState(false);
@@ -31,8 +31,8 @@ function SignUp() {
   const handleSignUp = async (values, { setSubmitting, setErrors }) => {
     try {
       setLoading(true);
-      const otpResponse = await axios.post(
-        "http://localhost:3000/api/user/send-otp",
+      const otpResponse = await interceptor.post(
+        "/api/user/send-otp",
         { phoneNumber: values.phoneNumber }
       );
       if (otpResponse.data.success) {

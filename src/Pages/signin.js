@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -9,6 +8,7 @@ import {
   signinStart,
 } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
+import interceptor from "../axios/userinterceptor";
 
 function SignIn() {
   const [formData, setFormData] = useState({
@@ -36,8 +36,8 @@ function SignIn() {
     dispatch(signinStart());
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/user/signin",
+      const response = await interceptor.post(
+        "/api/user/signin",
         formData
       );
 

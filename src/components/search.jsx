@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import interceptor from "../axios/userinterceptor";
 
 function Search() {
   const [search, setSearch] = useState("");
@@ -21,8 +21,8 @@ function Search() {
         const categoryQuery = searchParams.get("category");
         setSearch(locationQuery);
 
-        const response = await axios.get(
-          `http://localhost:3000/api/user/search?place=${locationQuery}&category=${categoryQuery}`,
+        const response = await interceptor.get(
+          `/api/user/search?place=${locationQuery}&category=${categoryQuery}`,
           { headers }
         );
 
