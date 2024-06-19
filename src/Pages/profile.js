@@ -16,7 +16,7 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { app } from "../firebase";
+import  app  from "../firebase";
 import { useNavigate } from "react-router-dom";
 import interceptor from "../axios/userinterceptor";
 
