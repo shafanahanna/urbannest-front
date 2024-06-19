@@ -19,58 +19,52 @@ function Payment() {
     setLoading(true);
     const userToken = localStorage.getItem("usertoken");
     const userId = localStorage.getItem("_id");
-
     if (!userToken) {
-      console.log("Token not found..");
+      console.log("token not found..");
       setLoading(false);
       return;
     }
-
     try {
-      console.log("Initiating order creation...");
-      const orderResponse = await interceptor.post("/api/user/order", {
+      const orderData = {
         userId: userId,
         PropertyId,
         amount: price,
         currency: "INR",
-      });
+      };
 
-      if (!orderResponse.data.success) {
-        throw new Error(orderResponse.data.message);
-      }
 
-      console.log("Order created successfully:", orderResponse.data.data);
+
+      const orderResponse = await interceptor.post(
+        "/api/user/order",
+        orderData
+      );
+
+      console.log("Order response:", orderResponse.data);
+
       const { payment_id, _id: orderId } = orderResponse.data.data;
 
-      const amount = property.price * 100;
-      const currency = "INR";
-      const receipt = `receipt_${Date.now()}`;
-
-      console.log("Initiating payment creation...");
-      const paymentResponse = await interceptor.post("/api/user/payment", {
-        amount,
-        currency,
-        receipt,
+      const paymentData = {
+        amount: property.price * 100,
+        currency: "INR",
+        receipt: `receipt_${Date.now()}`,
         payment_id,
-      });
+      };
+      console.log("Payment request payload:", paymentData);
 
-      if (!paymentResponse.data.success) {
-        throw new Error(paymentResponse.data.message);
-      }
+      const response = await interceptor.post("/api/user/payment", paymentData);
 
-      console.log("Payment created successfully:", paymentResponse.data.data);
-      const paymentData = paymentResponse.data.data;
+      console.log("Payment response:", response.data);
 
       const options = {
         key: process.env.REACT_APP_Razorpay,
-        amount: paymentData.amount,
-        currency: paymentData.currency,
-        receipt: paymentData.receipt,
+        amount: response.data.data.amount,
+        currency: response.data.data.currency,
+        receipt: response.data.data.receipt,
         name: "UrbanNest",
         description: "Test Transaction",
-        order_id: paymentData.id,
+        order_id: response.data.data.id,
         handler: function (response) {
-          console.log("Payment handler response:", response);
+          alert(`Order ID: ${response.razorpay_order_id}`);
           const orderDetails = {
             id: response.razorpay_order_id,
             payment_id: response.razorpay_payment_id,
@@ -85,7 +79,7 @@ function Payment() {
           email: currentUser.email,
         },
         notes: {
-          address: "Near kinfra, Calicut",
+          address: "Near kinfra,Calicut",
         },
         theme: {
           color: "#3399cc",
@@ -99,7 +93,7 @@ function Payment() {
         console.log("Razorpay SDK not loaded");
       }
     } catch (error) {
-      console.error("Error initiating payment:", error.message);
+      console.error("Error initiating payment:", error);
     } finally {
       setLoading(false);
     }
