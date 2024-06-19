@@ -19,7 +19,6 @@ function Payment() {
     setLoading(true);
     const userToken = localStorage.getItem("usertoken");
     const userId = localStorage.getItem("_id");
-    console.log(userId, "this is id");
     if (!userToken) {
       console.log("token not found..");
       setLoading(false);
@@ -46,17 +45,18 @@ function Payment() {
         payment_id,
       });
 
-      const {
-        data: { data: paymentData },
-      } = response;
+      // const {
+      //   data: { data: paymentData },
+      // } = response;
 
       const options = {
         key: process.env.REACT_APP_Razorpay,
-        amount: paymentData.amount,
-        currency: paymentData.currency,
+        amount: response.data.data.amount,
+        currency: response.data.data.currency,
+        receipt: response.data.data.receipt,
         name: "UrbanNest",
         description: "Test Transaction",
-        order_id: paymentData.id,
+        order_id: response.data.data.id,
         handler: function (response) {
           alert(`Order ID: ${response.razorpay_order_id}`);
           const orderDetails = {
@@ -72,13 +72,20 @@ function Payment() {
           name: currentUser.name,
           email: currentUser.email,
         },
+        notes: {
+          address: "Near kinfra,Calicut",
+        },
         theme: {
           color: "#3399cc",
         },
       };
 
-      const rzp1 = new window.Razorpay(options);
-      rzp1.open();
+      if (window.Razorpay) {
+        const rzp1 = new window.Razorpay(options);
+        rzp1.open();
+      } else {
+        console.log("Razorpay SDK not loaded");
+      }
     } catch (error) {
       console.error("Error initiating payment:", error);
     } finally {
