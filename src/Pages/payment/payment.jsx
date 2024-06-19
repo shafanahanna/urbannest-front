@@ -9,8 +9,8 @@ function Payment() {
   const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
 
-  const price = searchParams.get("price");
-  const PropertyId = searchParams.get("PropertyId");
+  const price = searchParams.get("price") || "";
+  const PropertyId = searchParams.get("PropertyId") || "";
   const { property } = location.state || {};
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -19,32 +19,28 @@ function Payment() {
     setLoading(true);
     const userToken = localStorage.getItem("usertoken");
     const userId = localStorage.getItem("_id");
+    
     if (!userToken) {
-      console.log("token not found..");
+      console.log("Token not found..");
       setLoading(false);
       return;
     }
+    
     try {
-      // const orderData = {
-      //   userId: userId,
-      //   PropertyId,
-      //   amount: price,
-      //   currency: "INR",
-      // };
-
-      const orderResponse = await interceptor.post("/api/user/order", {
-        userId: userId,
+      const orderData = {
+        userId,
         PropertyId,
         amount: price,
         currency: "INR",
-      });
+      };
 
+      const orderResponse = await interceptor.post("/api/user/order", orderData);
       console.log("Order response:", orderResponse.data);
-
+      
       const { payment_id, _id: orderId } = orderResponse.data.data;
 
       const paymentData = {
-        amount: property.price * 100,
+        amount: property?.price * 100 || 0,
         currency: "INR",
         receipt: `receipt_${Date.now()}`,
         payment_id,
@@ -52,17 +48,16 @@ function Payment() {
       console.log("Payment request payload:", paymentData);
 
       const response = await interceptor.post("/api/user/payment", paymentData);
-
       console.log("Payment response:", response.data);
 
       const options = {
-        key: process.env.REACT_APP_Razorpay,
-        amount: response.data.data.amount,
-        currency: response.data.data.currency,
-        receipt: response.data.data.receipt,
+        key: process.env.REACT_APP_Razorpay || "",
+        amount: response.data.data.amount || 0,
+        currency: response.data.data.currency || "INR",
+        receipt: response.data.data.receipt || "",
         name: "UrbanNest",
         description: "Test Transaction",
-        order_id: response.data.data.id,
+        order_id: response.data.data.id || "",
         handler: function (response) {
           alert(`Order ID: ${response.razorpay_order_id}`);
           const orderDetails = {
@@ -75,11 +70,11 @@ function Payment() {
           });
         },
         prefill: {
-          name: currentUser.name,
-          email: currentUser.email,
+          name: currentUser?.name || "",
+          email: currentUser?.email || "",
         },
         notes: {
-          address: "Near kinfra,Calicut",
+          address: "Near kinfra, Calicut",
         },
         theme: {
           color: "#3399cc",
@@ -94,6 +89,9 @@ function Payment() {
       }
     } catch (error) {
       console.error("Error initiating payment:", error);
+      if (error.response) {
+        console.log("Error response data:", error.response.data);
+      }
     } finally {
       setLoading(false);
     }

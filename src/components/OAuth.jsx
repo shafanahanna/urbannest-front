@@ -4,9 +4,9 @@ import { app } from "../firebase.js";
 import { useDispatch } from "react-redux";
 import { signinSuccess } from "../redux/user/userSlice.js";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { FcGoogle } from "react-icons/fc";
+import interceptor from "../axios/userinterceptor.js";
 
 function OAuth() {
   const dispatch = useDispatch();
@@ -18,8 +18,8 @@ function OAuth() {
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
 
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/google",
+      const response = await interceptor.post(
+        "/api/auth/google",
         {
           name: result.user.displayName,
           email: result.user.email,
