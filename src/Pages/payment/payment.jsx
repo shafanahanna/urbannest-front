@@ -25,19 +25,19 @@ function Payment() {
       return;
     }
     try {
-      const orderData = {
+      // const orderData = {
+      //   userId: userId,
+      //   PropertyId,
+      //   amount: price,
+      //   currency: "INR",
+      // };
+
+      const orderResponse = await interceptor.post("/api/user/order", {
         userId: userId,
         PropertyId,
         amount: price,
         currency: "INR",
-      };
-
-
-
-      const orderResponse = await interceptor.post(
-        "/api/user/order",
-        orderData
-      );
+      });
 
       console.log("Order response:", orderResponse.data);
 
