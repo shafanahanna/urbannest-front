@@ -19,13 +19,16 @@ function Payment() {
     setLoading(true);
     const userToken = localStorage.getItem("usertoken");
     const userId = localStorage.getItem("_id");
-    
+
+    console.log("Retrieved token:", userToken);
+    console.log("Retrieved userId:", userId);
+
     if (!userToken) {
       console.log("Token not found..");
       setLoading(false);
       return;
     }
-    
+
     try {
       const orderData = {
         userId,
@@ -34,9 +37,14 @@ function Payment() {
         currency: "INR",
       };
 
-      const orderResponse = await interceptor.post("/api/user/order", orderData);
+      console.log("Order request payload:", orderData);
+
+      const orderResponse = await interceptor.post(
+        "/api/user/order",
+        orderData
+      );
       console.log("Order response:", orderResponse.data);
-      
+
       const { payment_id, _id: orderId } = orderResponse.data.data;
 
       const paymentData = {
